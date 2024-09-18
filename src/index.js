@@ -6,7 +6,7 @@ import App from "./App"; // Import the main App component
 
 // Get the root element where the React app will be rendered
  
-createRoot(document.getElementById("app")).render(
+createRoot(document.getElementById("root")).render(
     <StrictMode>
       <App />
      </StrictMode>
