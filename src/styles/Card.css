@@ -1,24 +1,43 @@
 .card {
-    border: 1px solid #ddd; /* Optional: Add a border for better visibility */
-    border-radius: 8px; /* Optional: Add rounded corners */
-    overflow: hidden; /* Hide any overflow from the image */
-    width: 200px; /* Set the width for the card */
-    text-align: center; /* Center align text */
-    margin: 10px; /* Optional: Add spacing between cards */
-  }
-  
-  .card-image {
-    width: 100%; /* Make image fill the card width */
-    height: 150px; /* Set a fixed height for the image */
-    object-fit: cover; /* Ensure the image covers the area without distortion */
-  }
-  
-  .card-name {
-    margin: 10px 0; /* Add spacing above and below the name */
-  }
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px; /* Adjust gap as needed */
-    justify-content: center;
-  }
+  border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  overflow: hidden; /* Hide any overflow from the image */
+  width: 200px; /* Set the width for the card */
+  text-align: center; /* Center align text */
+  margin: 10px; /* Optional: Add spacing between cards */
+  cursor: pointer; /* Change cursor to pointer for clickability */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
+}
+
+.card-image {
+  width: 100%; /* Make image fill the card width */
+  height: 150px; /* Set a fixed height for the image */
+  object-fit: cover; /* Ensure the image covers the area without distortion */
+}
+
+.card-name {
+  margin: 10px 0; /* Add spacing above and below the name */
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Adjust gap as needed */
+  justify-content: center;
+}
+
+.win-message {
+  font-size: 24px;
+  color: green;
+  text-align: center;
+  margin: 20px;
+  padding: 10px;
+  border: 2px solid green;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
