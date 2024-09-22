@@ -9,8 +9,9 @@ const names = [
   'Robin Scherbatsky',
   'Lily Aldrin',
   'Marshall Eriksen',
-  'Cristin Milioti',
-  'David Henrie'
+  'Cristin Milioti ',
+  'David Henrie ',
+ 
 ];
 
 // Function to shuffle an array
@@ -30,19 +31,22 @@ function Content({ updateScore, resetScore }) {
 
   useEffect(() => {
     const storedGifs = localStorage.getItem("giphyGifs");
-
-    if (storedGifs) {
-      setGifs(JSON.parse(storedGifs));
-    } else {
+    const storedNames = localStorage.getItem("storedNames");
+  
+    // If names have changed or gifs are not stored, fetch new data
+    if (!storedGifs || storedNames !== JSON.stringify(names)) {
       const getGifs = async () => {
-        const gifPromises = names.map(name => fetchGiphyData(name));
+        const gifPromises = names.map((name) => fetchGiphyData(name));
         const gifResults = await Promise.all(gifPromises);
         const flattenedGifs = gifResults.flat();
         setGifs(flattenedGifs);
         localStorage.setItem("giphyGifs", JSON.stringify(flattenedGifs));
+        localStorage.setItem("storedNames", JSON.stringify(names)); // Store the current names array
       };
   
       getGifs();
+    } else {
+      setGifs(JSON.parse(storedGifs));
     }
   }, []);
 
