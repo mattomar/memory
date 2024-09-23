@@ -3,74 +3,43 @@ import Card from "./components/Card";
 import { fetchGiphyData } from "./fetchGiphyData";
 import './styles/Card.css'; 
 
-const names = [
+const defaultNames = [
   'Ted Mosby',
   'Barney Stinson',
   'Robin Scherbatsky',
   'Lily Aldrin',
   'Marshall Eriksen',
-  'Cristin Milioti ',
-  'David Henrie ',
- 
+  'Cristin Milioti',
+  'David Henrie',
 ];
-
-// Function to shuffle an array
-const shuffleArray = (array) => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
 
 function Content({ updateScore, resetScore }) {
   const [gifs, setGifs] = useState([]);
   const [clickedCards, setClickedCards] = useState([]);
-  const [hasWon, setHasWon] = useState(false); // Track if the player has won
+  const [hasWon, setHasWon] = useState(false);
+  const [error, setError] = useState(null); // State to track errors
 
   useEffect(() => {
-    const storedGifs = localStorage.getItem("giphyGifs");
-    const storedNames = localStorage.getItem("storedNames");
-  
-    // If names have changed or gifs are not stored, fetch new data
-    if (!storedGifs || storedNames !== JSON.stringify(names)) {
-      const getGifs = async () => {
-        const gifPromises = names.map((name) => fetchGiphyData(name));
+    // Fetch GIFs based on the names
+    const getGifs = async () => {
+      try {
+        const gifPromises = defaultNames.map(name => fetchGiphyData(name)); // Fetch GIFs for all names
         const gifResults = await Promise.all(gifPromises);
         const flattenedGifs = gifResults.flat();
         setGifs(flattenedGifs);
-        localStorage.setItem("giphyGifs", JSON.stringify(flattenedGifs));
-        localStorage.setItem("storedNames", JSON.stringify(names)); // Store the current names array
-      };
-  
-      getGifs();
-    } else {
-      setGifs(JSON.parse(storedGifs));
-    }
-  }, []);
-
-  const handleCardClick = (gif) => {
-    if (clickedCards.includes(gif.id)) {
-      resetScore(); // Reset score if the card was already clicked
-      setClickedCards([]); // Restart game
-    } else {
-      updateScore(); // Increment score
-      const updatedClickedCards = [...clickedCards, gif.id];
-      setClickedCards(updatedClickedCards); // Add card to clicked list
-      
-      // Check if all cards are clicked
-      if (updatedClickedCards.length === gifs.length) {
-        setHasWon(true); // Set win state
+      } catch (err) {
+        setError("Failed to load GIFs from Giphy. Please try again later.");
+        console.error("Error fetching Giphy data:", err);
       }
-    }
+    };
 
-    setGifs(shuffleArray(gifs)); // Shuffle the cards
-  };
+    getGifs();
+  }, []); // Empty dependency array to run only once
 
   return (
     <div>
-      {hasWon && <div className="win-message">You Win!</div>} {/* Show win message when all cards are clicked */}
+      {error && <div className="error-message">{error}</div>}
+      {hasWon && <div className="win-message">You Win!</div>}
       <div className="cards">
         {gifs.map((gif) => (
           <Card
