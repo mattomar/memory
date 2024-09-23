@@ -19,6 +19,15 @@ function Content({ updateScore, resetScore }) {
   const [hasWon, setHasWon] = useState(false);
   const [error, setError] = useState(null); // State to track errors
 
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+  
   useEffect(() => {
     // Fetch GIFs based on the names
     const getGifs = async () => {
@@ -35,6 +44,24 @@ function Content({ updateScore, resetScore }) {
 
     getGifs();
   }, []); // Empty dependency array to run only once
+
+  const handleCardClick = (gif) => {
+    if (clickedCards.includes(gif.id)) {
+      resetScore();
+      setClickedCards([]);
+    } else {
+      updateScore();
+      const updatedClickedCards = [...clickedCards, gif.id];
+      setClickedCards(updatedClickedCards);
+      
+      if (updatedClickedCards.length === gifs.length) {
+        setHasWon(true);
+      }
+    }
+
+    setGifs(shuffleArray(gifs));
+  };
+
 
   return (
     <div>
